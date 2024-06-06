@@ -1,7 +1,7 @@
 import MiddleRectangle from "../../components/Common/Rectangle/Middle";
 import * as Styled from "./style";
 import LargeRectangle from "../../components/Common/Rectangle/Large";
-import Signup from "../../components/Register/Signup";
+import Signup from "../../components/Register";
 
 export default function RegisterPage() {
   return (

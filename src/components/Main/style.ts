@@ -5,24 +5,27 @@ export const Container = styled.div`
   display: flex;
   justify-content: space-between;
 
+  background-color: #ffffff;
 `;
 
 export const MainContent = styled.div`
-    margin: 30px;
+  margin: 30px;
   flex-grow: 1;
   padding: 20px;
 `;
 
 export const Sidebar = styled.aside`
-    width: 30vw;
-  min-width:300px;
-  max-width:330px;
+  width: 30vw;
+  min-width: 300px;
+  max-width: 330px;
   height: 95vh;
-  background-color: #5C6ED0;
+  background-color: #5c6ed0;
   color: white;
   padding: 20px;
   position: relative;
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 `;
 
 export const MenuSelect = styled.div`
@@ -36,11 +39,11 @@ export const MenuSelect = styled.div`
   margin-bottom: 20px;
 
   &.active {
-    background-color: #7D8BD9;
+    background-color: #7d8bd9;
   }
 
   &:hover {
-    background-color: #7D8BD9;
+    background-color: #7d8bd9;
   }
 `;
 
@@ -51,7 +54,7 @@ export const MenuImage = styled.img`
 export const MenuItem = styled.div`
   font-size: 18px;
   font-weight: bold;
-  color: #FFF;
+  color: #fff;
   padding: 10px 20px;
 `;
 
@@ -71,7 +74,7 @@ export const Username = styled.span`
 
 export const LogoutButton = styled.img`
   font-size: 16px;
-  color: #FFF;
+  color: #fff;
   background-color: transparent;
   border: none;
   border-radius: 10px;
@@ -79,9 +82,11 @@ export const LogoutButton = styled.img`
   margin-right: 10px;
   padding: 10px;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 
   &:hover {
-    background-color: #98A9F0;
+    background-color: #98a9f0;
   }
 `;

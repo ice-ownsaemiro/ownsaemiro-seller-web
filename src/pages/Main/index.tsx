@@ -1,5 +1,10 @@
-// import Main from "../../components/Main/MainPage";
+import Main from "../../components/Main/MainPage";
 
 export default function MainPage() {
-  return <div>{/* <Main /> */}</div>;
+  return (
+    <div>
+      {" "}
+      <Main />
+    </div>
+  );
 }

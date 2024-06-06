@@ -94,14 +94,26 @@ export const ButtonContainer = styled.div`
         color 0.3s;
     }
   }
+`;
 
-  .right-align {
-    justify-content: flex-end;
-    margin-right: 10px;
-  }
+export const RegisterButton = styled.button`
+  width: 115px;
+  height: 30px;
+  background-color: transparent;
+  border: 0px;
+  border-radius: 5px;
+  font-size: 15px;
+  color: #999;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 5px 30px;
 
-  .left-align {
-    justify-content: flex-start;
-    margin-left: 10px;
+  &:hover {
+    color: #576fd7;
+    transition:
+      background-color 0.3s,
+      color 0.3s;
   }
 `;

@@ -1,26 +1,15 @@
 import { useState, useEffect } from "react";
-import plus from "../../assets/logo_plus.svg";
-import search_logo from "../../assets/logo_search.svg";
-import { SellHistoryData } from "../Seller/Data/SellHistoryData";
-import SellRequestWrite from "../Seller/Modal/SellRequestWrite";
-import {
-  MainContent,
-  FilterTableHeader,
-  Filter,
-  FilterItem,
-  SearchBar,
-  SearchBarInput,
-  SearchIcon,
-  TableHeader,
-  Button,
-  Table,
-  Th,
-  Td,
-  Pagination,
-} from "./Style/SellerPageStyle";
+import plus from "../../../assets/logo_plus.svg";
+import search_logo from "../../../assets/logo_search.svg";
+import { Table, Th, Td } from "./style";
+
+import * as Styled from "./style";
+import { salesRequestState } from "../../../atoms/atoms";
+import { useRecoilValue } from "recoil";
+import { SellRequestWrite } from "../../Common/Modal";
 
 function SellRequest() {
-  const [data, setData] = useState(SellHistoryData);
+  const data = useRecoilValue(salesRequestState);
   const [selectedStatus, setSelectedStatus] = useState("전체");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 7;
@@ -37,7 +26,7 @@ function SellRequest() {
   const filteredData =
     selectedStatus === "전체"
       ? data
-      : data.filter((item) => item.status === selectedStatus);
+      : data.filter((item) => item.state === selectedStatus);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -83,7 +72,7 @@ function SellRequest() {
 
   const handleDelete = () => {
     const newData = data.filter((item) => !selectedItems.includes(item.id));
-    setData(newData);
+    // setData(newData);
     setSelectedItems([]);
     setSelectAll(false);
   };
@@ -97,15 +86,15 @@ function SellRequest() {
   };
 
   const handleSave = (newItem: any) => {
-    setData([...data, newItem]);
+    // setData([...data, newItem]);
   };
 
   return (
-    <MainContent key={`${selectedStatus}-${currentPage}`}>
+    <Styled.MainContent key={`${selectedStatus}-${currentPage}`}>
       <h1 style={{ color: "#555" }}>판매 요청</h1>
-      <FilterTableHeader>
-        <Filter>
-          <FilterItem>
+      <Styled.FilterTableHeader>
+        <Styled.Filter>
+          <Styled.FilterItem>
             <div
               style={{
                 color: "#999",
@@ -116,12 +105,12 @@ function SellRequest() {
             >
               검색
             </div>
-            <SearchBar>
-              <SearchIcon src={search_logo}></SearchIcon>
-              <SearchBarInput type="search" placeholder="검색" />
-            </SearchBar>
-          </FilterItem>
-          <FilterItem>
+            <Styled.SearchBar>
+              <Styled.SearchIcon src={search_logo}></Styled.SearchIcon>
+              <Styled.SearchBarInput type="search" placeholder="검색" />
+            </Styled.SearchBar>
+          </Styled.FilterItem>
+          <Styled.FilterItem>
             <div
               style={{ color: "#999", fontWeight: "bold", marginBottom: "5px" }}
             >
@@ -141,22 +130,22 @@ function SellRequest() {
               <option value="승인 완료">승인 완료</option>
               <option value="승인 거절">승인 거절</option>
             </select>
-          </FilterItem>
-        </Filter>
-        <TableHeader>
-          <Button className="btn approve" onClick={handleOpen}>
+          </Styled.FilterItem>
+        </Styled.Filter>
+        <Styled.TableHeader>
+          <Styled.Button className="btn approve" onClick={handleOpen}>
             <img
               src={plus}
               alt="plus icon"
               style={{ width: "16px", height: "16px", marginRight: "8px" }}
             />
             작성 하기
-          </Button>
-          <Button className="btn reject" onClick={handleDelete}>
+          </Styled.Button>
+          <Styled.Button className="btn reject" onClick={handleDelete}>
             요청 취소
-          </Button>
-        </TableHeader>
-      </FilterTableHeader>
+          </Styled.Button>
+        </Styled.TableHeader>
+      </Styled.FilterTableHeader>
       <Table style={{ borderRadius: "5px", width: "70vw" }}>
         <thead>
           <tr>
@@ -185,29 +174,29 @@ function SellRequest() {
                   onChange={() => handleSelectItem(item.id)}
                 />
               </Td>
-              <Td>{item.eventName}</Td>
-              <Td>{item.applicant}</Td>
-              <Td>{item.requestDate}</Td>
-              <Td>{item.eventDate}</Td>
-              <Td>{item.seatstatus}</Td>
+              <Td>{item.name}</Td>
+              <Td>{item.hostName}</Td>
+              <Td>{item.applyDate}</Td>
+              <Td>{item.duration}</Td>
+              <Td>{item.state}</Td>
               <Td
                 className={
-                  item.status === "승인 대기"
+                  item.state === "승인 대기"
                     ? "stanby"
-                    : item.status === "승인 완료"
+                    : item.state === "승인 완료"
                       ? "approved"
-                      : item.status === "승인 거절"
+                      : item.state === "승인 거절"
                         ? "rejected"
                         : ""
                 }
               >
-                {item.status}
+                {item.state}
               </Td>
             </tr>
           ))}
         </tbody>
       </Table>
-      <Pagination>
+      <Styled.Pagination>
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
@@ -238,7 +227,7 @@ function SellRequest() {
         >
           &gt;
         </button>
-      </Pagination>
+      </Styled.Pagination>
       {open && (
         <SellRequestWrite
           open={open}
@@ -246,7 +235,7 @@ function SellRequest() {
           handleSave={handleSave}
         />
       )}
-    </MainContent>
+    </Styled.MainContent>
   );
 }
 

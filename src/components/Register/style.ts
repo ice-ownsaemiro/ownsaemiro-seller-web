@@ -1,4 +1,3 @@
-// src/components/Signup/SignupStyle.ts
 import styled from "styled-components";
 
 export const SignupContainer = styled.div`

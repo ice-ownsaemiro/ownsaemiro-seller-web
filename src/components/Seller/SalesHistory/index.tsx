@@ -1,30 +1,20 @@
-// src/components/seller/SelledHistory.tsx
 import { useState, useEffect } from "react";
-import search_logo from "../../assets/logo_search.svg";
-import { SellingData } from "../Seller/Data/SellingData";
-import {
-  MainContent,
-  FilterTableHeader,
-  Filter,
-  FilterItem,
-  SearchBar,
-  SearchBarInput,
-  SearchIcon,
-  TableHeader,
-  Button,
-  Table,
-  Th,
-  Td,
-  Pagination,
-} from "./Style/SellerPageStyle";
+import search_logo from "../../../assets/logo_search.svg";
 
-function SelledHistory() {
-  const [data, setData] = useState(SellingData);
+import * as Styled from "./style";
+import { useFetchSalesHistories } from "../../../hooks/useFetchSalesHistories";
+import { useRecoilValue } from "recoil";
+import { salesHistoryState } from "../../../atoms/atoms";
+
+export default function SelledHistory() {
+  const data = useRecoilValue(salesHistoryState);
   const [selectedStatus, setSelectedStatus] = useState("전체");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 7;
   const [selectAll, setSelectAll] = useState(false);
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
+
+  useFetchSalesHistories(currentPage, itemsPerPage);
 
   const filteredData =
     selectedStatus === "전체"
@@ -42,18 +32,25 @@ function SelledHistory() {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const currentItems = Array.isArray(filteredData)
+    ? filteredData.slice(indexOfFirstItem, indexOfLastItem)
+    : [];
+  const totalPages = Array.isArray(filteredData)
+    ? Math.ceil(filteredData.length / itemsPerPage)
+    : 0;
 
   useEffect(() => {
     if (selectAll) {
       const newSelectedItems = [
-        ...new Set([...selectedItems, ...currentItems.map((item) => item.id)]),
+        ...new Set([
+          ...selectedItems,
+          ...currentItems.map((item) => item.eventId),
+        ]),
       ];
       setSelectedItems(newSelectedItems);
     } else {
       const newSelectedItems = selectedItems.filter(
-        (id) => !currentItems.some((item) => item.id === id)
+        (id) => !currentItems.some((item) => item.eventId === id)
       );
       setSelectedItems(newSelectedItems);
     }
@@ -79,28 +76,31 @@ function SelledHistory() {
 
   const handleMarkAsSold = () => {
     const newData = data.map((item) =>
-      selectedItems.includes(item.id) ? { ...item, status: "판매 완료" } : item
+      selectedItems.includes(item.eventId)
+        ? { ...item, status: "판매 완료" }
+        : item
     );
-    setData(newData);
+    // setData(newData);
     setSelectedItems([]);
     setSelectAll(false);
   };
 
   const handleMarkAsStopped = () => {
     const newData = data.map((item) =>
-      selectedItems.includes(item.id) ? { ...item, status: "판매 중지" } : item
+      selectedItems.includes(item.eventId)
+        ? { ...item, status: "판매 중지" }
+        : item
     );
-    setData(newData);
     setSelectedItems([]);
     setSelectAll(false);
   };
 
   return (
-    <MainContent key={`${selectedStatus}-${currentPage}`}>
+    <Styled.MainContent key={`${selectedStatus}-${currentPage}`}>
       <h1 style={{ color: "#555" }}>판매 이력</h1>
-      <FilterTableHeader>
-        <Filter>
-          <FilterItem>
+      <Styled.FilterTableHeader>
+        <Styled.Filter>
+          <Styled.FilterItem>
             <div
               style={{
                 color: "#999",
@@ -111,12 +111,15 @@ function SelledHistory() {
             >
               검색
             </div>
-            <SearchBar>
-              <SearchIcon className="fa-search" src={search_logo}></SearchIcon>
-              <SearchBarInput type="search" placeholder="검색" />
-            </SearchBar>
-          </FilterItem>
-          <FilterItem>
+            <Styled.SearchBar>
+              <Styled.SearchIcon
+                className="fa-search"
+                src={search_logo}
+              ></Styled.SearchIcon>
+              <Styled.SearchBarInput type="search" placeholder="검색" />
+            </Styled.SearchBar>
+          </Styled.FilterItem>
+          <Styled.FilterItem>
             <div
               style={{ color: "#999", fontWeight: "bold", marginBottom: "5px" }}
             >
@@ -137,70 +140,78 @@ function SelledHistory() {
               <option value="판매 전">판매 전</option>
               <option value="판매 중지">판매 중지</option>
             </select>
-          </FilterItem>
-        </Filter>
-        <TableHeader>
-          <Button className="btn approve" onClick={handleMarkAsSold}>
+          </Styled.FilterItem>
+        </Styled.Filter>
+        <Styled.TableHeader>
+          <Styled.Button className="btn approve" onClick={handleMarkAsSold}>
             판매 완료
-          </Button>
-          <Button className="btn reject" onClick={handleMarkAsStopped}>
+          </Styled.Button>
+          <Styled.Button className="btn reject" onClick={handleMarkAsStopped}>
             판매 중지
-          </Button>
-        </TableHeader>
-      </FilterTableHeader>
-      <Table style={{ borderRadius: "5px", width: "70vw" }}>
+          </Styled.Button>
+        </Styled.TableHeader>
+      </Styled.FilterTableHeader>
+      <Styled.Table style={{ borderRadius: "5px", width: "70vw" }}>
         <thead>
           <tr>
-            <Th>
+            <Styled.Th>
               <input
                 type="checkbox"
                 checked={selectAll}
                 onChange={handleSelectAll}
               />
-            </Th>
-            <Th>공연명</Th>
-            <Th>신청자명</Th>
-            <Th>신청일</Th>
-            <Th>공연일</Th>
-            <Th>상태</Th>
-            <Th> </Th>
+            </Styled.Th>
+            <Styled.Th>공연명</Styled.Th>
+            <Styled.Th>신청자명</Styled.Th>
+            <Styled.Th>신청일</Styled.Th>
+            <Styled.Th>공연일</Styled.Th>
+            <Styled.Th>상태</Styled.Th>
+            <Styled.Th> </Styled.Th>
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((item) => (
-            <tr key={item.id}>
-              <Td onClick={(e) => e.stopPropagation()}>
-                <input
-                  type="checkbox"
-                  checked={selectedItems.includes(item.id)}
-                  onChange={() => handleSelectItem(item.id)}
-                />
-              </Td>
-              <Td>{item.eventName}</Td>
-              <Td>{item.applicant}</Td>
-              <Td>{item.requestDate}</Td>
-              <Td>{item.eventDate}</Td>
-              <Td>{item.status}</Td>
-              <Td
-                className={
-                  item.status === "판매 완료"
-                    ? "selled"
-                    : item.status === "판매 중"
-                      ? "selling"
-                      : item.status === "판매 전"
-                        ? "beforesell"
-                        : item.status === "판매 중지"
-                          ? "selldeny"
-                          : ""
-                }
-              >
-                {item.status}
-              </Td>
+          {currentItems.length === 0 ? (
+            <tr>
+              <Styled.Td colSpan={7} style={{ textAlign: "center" }}>
+                데이터가 없습니다
+              </Styled.Td>
             </tr>
-          ))}
+          ) : (
+            currentItems.map((item) => (
+              <tr key={item.eventId}>
+                <Styled.Td onClick={(e) => e.stopPropagation()}>
+                  <input
+                    type="checkbox"
+                    checked={selectedItems.includes(item.eventId)}
+                    onChange={() => handleSelectItem(item.eventId)}
+                  />
+                </Styled.Td>
+                <Styled.Td>{item.eventName}</Styled.Td>
+                <Styled.Td>{item.hostName}</Styled.Td>
+                <Styled.Td>{item.applyDate}</Styled.Td>
+                <Styled.Td>{item.duration}</Styled.Td>
+                <Styled.Td>{item.status}</Styled.Td>
+                <Styled.Td
+                  className={
+                    item.status === "판매 완료"
+                      ? "selled"
+                      : item.status === "판매 중"
+                        ? "selling"
+                        : item.status === "판매 전"
+                          ? "beforesell"
+                          : item.status === "판매 중지"
+                            ? "selldeny"
+                            : ""
+                  }
+                >
+                  {item.status}
+                </Styled.Td>
+              </tr>
+            ))
+          )}
         </tbody>
-      </Table>
-      <Pagination>
+      </Styled.Table>
+      <Styled.Pagination>
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
@@ -231,9 +242,7 @@ function SelledHistory() {
         >
           &gt;
         </button>
-      </Pagination>
-    </MainContent>
+      </Styled.Pagination>
+    </Styled.MainContent>
   );
 }
-
-export default SelledHistory;
