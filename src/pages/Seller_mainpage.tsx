@@ -1,7 +1,7 @@
 import React from "react";
 import MainPage from "../components/MainPage";
 
-function Manager_mainPage() {
+function Seller_mainPage() {
   return (
     <div>
       <MainPage />
@@ -9,4 +9,4 @@ function Manager_mainPage() {
   );
 }
 
-export default Manager_mainPage;
+export default Seller_mainPage;

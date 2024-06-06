@@ -1,7 +1,18 @@
+// src/components/seller/SellRequestWrite.tsx
 import React, { useState } from "react";
-import { Box, Button, Typography, Modal } from "@mui/material";
+import { Box, Button, Modal } from "@mui/material";
 import back_logo from "../../../assets/logo_back.svg";
-import "../../../css/EventForm.css";
+import {
+  EventFormContainer,
+  EventFormExplain,
+  Label,
+  LabelFit,
+  LabelMiddle,
+  TextDisplay,
+  TextDisplayFit,
+  TextDisplayExplain,
+  TextStyle,
+} from "./SellRequestWriteStyle";
 
 const style = {
   position: "absolute",
@@ -71,98 +82,72 @@ const SellRequestWrite: React.FC<SellRequestWriteProps> = ({
             style={{ marginTop: "10px", marginLeft: "10px" }}
           />
         </Button>
-        <div className="event-form">
-          <label htmlFor="eventName" className="label">
-            공연명
-          </label>
-          <input
+        <EventFormContainer>
+          <Label htmlFor="eventName">공연명</Label>
+          <TextDisplay
             type="text"
-            className="text-display"
             value={eventName}
             onChange={(e) => setEventName(e.target.value)}
           />
-        </div>
+        </EventFormContainer>
 
-        <div className="event-form">
-          <label htmlFor="eventDate" className="label">
-            공연 날짜
-          </label>
-          <input
+        <EventFormContainer>
+          <Label htmlFor="eventDate">공연 날짜</Label>
+          <TextDisplayFit
             type="date"
-            className="text-display-fit"
             value={eventStartDate}
             onChange={(e) => setEventStartDate(e.target.value)}
           />
-          <span className="text-style"> ~ </span>
-          <input
+          <TextStyle> ~ </TextStyle>
+          <TextDisplayFit
             type="date"
-            className="text-display-fit"
             value={eventEndDate}
             onChange={(e) => setEventEndDate(e.target.value)}
           />
-          <label htmlFor="eventTime" className="label-middle">
-            공연 시간
-          </label>
-          <input
+          <LabelMiddle htmlFor="eventTime">공연 시간</LabelMiddle>
+          <TextDisplayFit
             type="text"
-            className="text-display-fit"
             value={eventTime}
             onChange={(e) => setEventTime(e.target.value)}
           />
-          <span className="text-style">분</span>
-          <label htmlFor="eventPlace" className="label-middle">
-            공연 장소
-          </label>
-          <input
+          <TextStyle>분</TextStyle>
+          <LabelMiddle htmlFor="eventPlace">공연 장소</LabelMiddle>
+          <TextDisplay
             type="text"
-            className="text-display"
             value={eventPlace}
             onChange={(e) => setEventPlace(e.target.value)}
           />
-        </div>
+        </EventFormContainer>
 
-        <div className="event-form">
-          <label htmlFor="eventPlanner" className="label">
-            주최/기획
-          </label>
-          <input
+        <EventFormContainer>
+          <Label htmlFor="eventPlanner">주최/기획</Label>
+          <TextDisplayFit
             type="text"
-            className="text-display-fit"
             value={eventPlanner}
             onChange={(e) => setEventPlanner(e.target.value)}
           />
-          <label htmlFor="eventNumber" className="label">
-            대표자 전화번호
-          </label>
-          <input
+          <Label htmlFor="eventNumber">대표자 전화번호</Label>
+          <TextDisplayFit
             type="text"
-            className="text-display-fit"
             value={eventNumber}
             onChange={(e) => setEventNumber(e.target.value)}
           />
-          <label htmlFor="eventAge" className="label">
-            관람등급
-          </label>
-          <input
+          <Label htmlFor="eventAge">관람등급</Label>
+          <TextDisplayFit
             type="text"
-            className="text-display-fit"
             value={eventAge}
             onChange={(e) => setEventAge(e.target.value)}
           />
-        </div>
+        </EventFormContainer>
 
-        <div className="event-form-explain">
-          <label htmlFor="eventExplain" className="label-fit">
-            공연내용 요약
-          </label>
-          <textarea
-            className="text-display-explain2"
+        <EventFormExplain>
+          <LabelFit htmlFor="eventExplain">공연내용 요약</LabelFit>
+          <TextDisplayExplain
             value={eventExplain}
             onChange={(e) => setEventExplain(e.target.value)}
             maxLength={500}
-            style={{ height: "480px" }}
           />
-        </div>
+        </EventFormExplain>
 
         <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
           <Button variant="contained" onClick={handleSubmit} sx={{ mr: 1 }}>

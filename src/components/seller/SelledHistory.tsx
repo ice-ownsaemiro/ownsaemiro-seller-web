@@ -1,7 +1,22 @@
+// src/components/seller/SelledHistory.tsx
 import React, { useState, useEffect } from "react";
-import "../../css/MainPage.css";
 import search_logo from "../../assets/logo_search.svg";
 import { SellingData } from "./Data/SellingData";
+import {
+  MainContent,
+  FilterTableHeader,
+  Filter,
+  FilterItem,
+  SearchBar,
+  SearchBarInput,
+  SearchIcon,
+  TableHeader,
+  Button,
+  Table,
+  Th,
+  Td,
+  Pagination,
+} from "./Style/SellerPageStyle";
 
 function SelledHistory() {
   const [data, setData] = useState(SellingData);
@@ -81,11 +96,11 @@ function SelledHistory() {
   };
 
   return (
-    <main key={`${selectedStatus}-${currentPage}`} className="main-content">
+    <MainContent key={`${selectedStatus}-${currentPage}`}>
       <h1 style={{ color: "#555" }}>판매 이력</h1>
-      <div className="filter-table-header">
-        <div className="filter">
-          <div className="filter-item">
+      <FilterTableHeader>
+        <Filter>
+          <FilterItem>
             <div
               style={{
                 color: "#999",
@@ -96,16 +111,15 @@ function SelledHistory() {
             >
               검색
             </div>
-            <div className="search-bar">
-              <img className="fa-search" src={search_logo}></img>
-              <input
-                className="search-bar__input"
+            <SearchBar>
+              <SearchIcon className="fa-search" src={search_logo}></SearchIcon>
+              <SearchBarInput
                 type="search"
                 placeholder="검색"
               />
-            </div>
-          </div>
-          <div className="filter-item">
+            </SearchBar>
+          </FilterItem>
+          <FilterItem>
             <div
               style={{ color: "#999", fontWeight: "bold", marginBottom: "5px" }}
             >
@@ -113,7 +127,7 @@ function SelledHistory() {
             </div>
             <select
               value={selectedStatus}
-              style={{ border: "2px solid #E5E5E5", borderRadius: "5px" }}
+              style={{ border: "2px solid #E5E5E5", borderRadius: "5px", height:"31px" }}
               onChange={(e) => setSelectedStatus(e.target.value)}
             >
               <option value="전체">전체</option>
@@ -122,51 +136,51 @@ function SelledHistory() {
               <option value="판매 전">판매 전</option>
               <option value="판매 중지">판매 중지</option>
             </select>
-          </div>
-        </div>
-        <div className="table-header">
-          <button className="btn approve" onClick={handleMarkAsSold}>
+          </FilterItem>
+        </Filter>
+        <TableHeader>
+          <Button className="btn approve" onClick={handleMarkAsSold}>
             판매 완료
-          </button>
-          <button className="btn reject" onClick={handleMarkAsStopped}>
+          </Button>
+          <Button className="btn reject" onClick={handleMarkAsStopped}>
             판매 중지
-          </button>
-        </div>
-      </div>
-      <table style={{ borderRadius: "5px", width: "70vw" }}>
+          </Button>
+        </TableHeader>
+      </FilterTableHeader>
+      <Table style={{ borderRadius: "5px", width: "70vw" }}>
         <thead>
           <tr>
-            <th>
+            <Th>
               <input
                 type="checkbox"
                 checked={selectAll}
                 onChange={handleSelectAll}
               />
-            </th>
-            <th>공연명</th>
-            <th>신청자명</th>
-            <th>신청일</th>
-            <th>공연일</th>
-            <th>상태</th>
-            <th> </th>
+            </Th>
+            <Th>공연명</Th>
+            <Th>신청자명</Th>
+            <Th>신청일</Th>
+            <Th>공연일</Th>
+            <Th>상태</Th>
+            <Th> </Th>
           </tr>
         </thead>
         <tbody>
           {currentItems.map((item) => (
             <tr key={item.id}>
-              <td onClick={(e) => e.stopPropagation()}>
+              <Td onClick={(e) => e.stopPropagation()}>
                 <input
                   type="checkbox"
                   checked={selectedItems.includes(item.id)}
                   onChange={() => handleSelectItem(item.id)}
                 />
-              </td>
-              <td>{item.eventName}</td>
-              <td>{item.applicant}</td>
-              <td>{item.requestDate}</td>
-              <td>{item.eventDate}</td>
-              <td>{item.status}</td>
-              <td
+              </Td>
+              <Td>{item.eventName}</Td>
+              <Td>{item.applicant}</Td>
+              <Td>{item.requestDate}</Td>
+              <Td>{item.eventDate}</Td>
+              <Td>{item.status}</Td>
+              <Td
                 className={
                   item.status === "판매 완료"
                     ? "selled"
@@ -180,12 +194,12 @@ function SelledHistory() {
                 }
               >
                 {item.status}
-              </td>
+              </Td>
             </tr>
           ))}
         </tbody>
-      </table>
-      <div className="pagination">
+      </Table>
+      <Pagination>
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
@@ -216,8 +230,8 @@ function SelledHistory() {
         >
           &gt;
         </button>
-      </div>
-    </main>
+      </Pagination>
+    </MainContent>
   );
 }
 

@@ -1,9 +1,23 @@
 import React, { useState, useEffect } from "react";
 import plus from "../../assets/logo_plus.svg";
 import search_logo from "../../assets/logo_search.svg";
-import "../../css/MainPage.css";
 import { SellHistoryData } from "./Data/SellHistoryData";
 import SellRequestWrite from "./Modal/SellRequestWrite";
+import {
+  MainContent,
+  FilterTableHeader,
+  Filter,
+  FilterItem,
+  SearchBar,
+  SearchBarInput,
+  SearchIcon,
+  TableHeader,
+  Button,
+  Table,
+  Th,
+  Td,
+  Pagination,
+} from "./Style/SellerPageStyle";
 
 function SellRequest() {
   const [data, setData] = useState(SellHistoryData);
@@ -14,14 +28,16 @@ function SellRequest() {
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [open, setOpen] = useState(false);
 
+  useEffect(() => {
+    setCurrentPage(1);
+    setSelectedItems([]);
+    setSelectAll(false);
+  }, [selectedStatus]);
+
   const filteredData =
     selectedStatus === "전체"
       ? data
       : data.filter((item) => item.status === selectedStatus);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [selectedStatus]);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -85,11 +101,11 @@ function SellRequest() {
   };
 
   return (
-    <main key={`${selectedStatus}-${currentPage}`} className="main-content">
+    <MainContent key={`${selectedStatus}-${currentPage}`}>
       <h1 style={{ color: "#555" }}>판매 요청</h1>
-      <div className="filter-table-header">
-        <div className="filter">
-          <div className="filter-item">
+      <FilterTableHeader>
+        <Filter>
+          <FilterItem>
             <div
               style={{
                 color: "#999",
@@ -100,16 +116,15 @@ function SellRequest() {
             >
               검색
             </div>
-            <div className="search-bar">
-              <img className="fa-search" src={search_logo}></img>
-              <input
-                className="search-bar__input"
+            <SearchBar>
+              <SearchIcon src={search_logo}></SearchIcon>
+              <SearchBarInput
                 type="search"
                 placeholder="검색"
               />
-            </div>
-          </div>
-          <div className="filter-item">
+            </SearchBar>
+          </FilterItem>
+          <FilterItem>
             <div
               style={{ color: "#999", fontWeight: "bold", marginBottom: "5px" }}
             >
@@ -117,7 +132,7 @@ function SellRequest() {
             </div>
             <select
               value={selectedStatus}
-              style={{ border: "2px solid #E5E5E5", borderRadius: "5px" }}
+              style={{ border: "2px solid #E5E5E5", borderRadius: "5px", height:"31px"  }}
               onChange={(e) => setSelectedStatus(e.target.value)}
             >
               <option value="전체">전체</option>
@@ -125,56 +140,56 @@ function SellRequest() {
               <option value="승인 완료">승인 완료</option>
               <option value="승인 거절">승인 거절</option>
             </select>
-          </div>
-        </div>
-        <div className="table-header">
-          <button className="btn approve" onClick={handleOpen}>
+          </FilterItem>
+        </Filter>
+        <TableHeader>
+          <Button className="btn approve" onClick={handleOpen}>
             <img
               src={plus}
               alt="plus icon"
               style={{ width: "16px", height: "16px", marginRight: "8px" }}
             />
             작성 하기
-          </button>
-          <button className="btn reject" onClick={handleDelete}>
+          </Button>
+          <Button className="btn reject" onClick={handleDelete}>
             요청 취소
-          </button>
-        </div>
-      </div>
-      <table style={{ borderRadius: "5px", width: "70vw" }}>
+          </Button>
+        </TableHeader>
+      </FilterTableHeader>
+      <Table style={{ borderRadius: "5px", width: "70vw" }}>
         <thead>
           <tr>
-            <th>
+            <Th>
               <input
                 type="checkbox"
                 checked={selectAll}
                 onChange={handleSelectAll}
               />
-            </th>
-            <th>공연명</th>
-            <th>신청자명</th>
-            <th>신청일</th>
-            <th>공연일</th>
-            <th>좌석 수</th>
-            <th>상태</th>
+            </Th>
+            <Th>공연명</Th>
+            <Th>신청자명</Th>
+            <Th>신청일</Th>
+            <Th>공연일</Th>
+            <Th>좌석 수</Th>
+            <Th>상태</Th>
           </tr>
         </thead>
         <tbody>
           {currentItems.map((item) => (
             <tr key={item.id}>
-              <td onClick={(e) => e.stopPropagation()}>
+              <Td onClick={(e) => e.stopPropagation()}>
                 <input
                   type="checkbox"
                   checked={selectedItems.includes(item.id)}
                   onChange={() => handleSelectItem(item.id)}
                 />
-              </td>
-              <td>{item.eventName}</td>
-              <td>{item.applicant}</td>
-              <td>{item.requestDate}</td>
-              <td>{item.eventDate}</td>
-              <td>{item.seatstatus}</td>
-              <td
+              </Td>
+              <Td>{item.eventName}</Td>
+              <Td>{item.applicant}</Td>
+              <Td>{item.requestDate}</Td>
+              <Td>{item.eventDate}</Td>
+              <Td>{item.seatstatus}</Td>
+              <Td
                 className={
                   item.status === "승인 대기"
                     ? "stanby"
@@ -186,12 +201,12 @@ function SellRequest() {
                 }
               >
                 {item.status}
-              </td>
+              </Td>
             </tr>
           ))}
         </tbody>
-      </table>
-      <div className="pagination">
+      </Table>
+      <Pagination>
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
@@ -222,7 +237,7 @@ function SellRequest() {
         >
           &gt;
         </button>
-      </div>
+      </Pagination>
       {open && (
         <SellRequestWrite
           open={open}
@@ -230,7 +245,7 @@ function SellRequest() {
           handleSave={handleSave}
         />
       )}
-    </main>
+    </MainContent>
   );
 }
 

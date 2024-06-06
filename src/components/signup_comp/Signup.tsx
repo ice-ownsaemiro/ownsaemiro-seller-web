@@ -1,11 +1,23 @@
+// src/components/Signup/Signup.tsx
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import '../../css/Signup.css';
 import logo from '../../assets/logo_login.svg'
 import check from '../../assets/logo_check.svg';
 import error from '../../assets/logo_error.svg';
+import {
+  SignupContainer,
+  TabContainer,
+  TabLink,
+  FormContainer,
+  LoginLabel,
+  LoginInput,
+  SignupCheckButton,
+  SignupEndButton,
+  CheckContainer,
+  ErrorContainer,
+} from "./SignupStyle";
 
-function Signup(){
+function Signup() {
   /* 판매자 회원가입을 위한 useState */
   const [isSellerSignup, setIsSellerSignup] = useState(true);
   /* 관리자 회원가입을 위한 useState */
@@ -27,45 +39,15 @@ function Signup(){
   const navigate = useNavigate();
 
   const handleEmailVerification = () => {
-    // GET : 서버로부터 데이터 가져오기
-    // POST : 서버로 데이터 보내기
-
     setIsEmailVerified(true);
-    // axios.post("http://api/auth/sign-in", {
-    //   ID: saveID,
-    //   PW: savePW
-    // })
-    // .then((res)=>{
-    //     console.log(res);
-    // })
-    // .catch((e)=>{
-    //   alert(e);
-    // })
   };
 
   const handleIDCheck = () => {
     setIsIdUnique(true);
-    // axios.get(`https://api/auth/check?serial_id=${saveID}`)
-    // .then((res)=>{
-    //   // res.data를 이용한 중복되는 아이디 체크 기능 추가
-    // })
-    // .catch((e)=>{
-    //   alert(e);
-    // })
   };
 
   const handleSubmit = () => {
     if (isEmailCheck && isIDCheck && savePW === confirmPW) {
-      // axios.post("http://api/auth/sign-up", {
-      //   ID: saveID,
-      //   PW: savePW
-      // })
-      // .then((res)=>{
-      //     console.log(res);
-      // })
-      // .catch((e)=>{
-      //   alert(e);
-      // })
       alert("회원가입 완료되었습니다.\n\n로그인 해주세요.");
       navigate('/');
     } else {
@@ -74,11 +56,12 @@ function Signup(){
   };
 
   return (
-    <div className="signup">
-      <img src={logo} alt="로고 출력 실패" style={{margin:"15px", color:"#576FD7"}}/>
-      <div className="tab">
-        <button className={`tablinks ${isSellerSignup ? 'tab-active':''}`}
-          onClick={()=>{
+    <SignupContainer>
+      <img src={logo} alt="로고 출력 실패" style={{ margin: "15px", color: "#576FD7" }} />
+      <TabContainer>
+        <TabLink
+          className={isSellerSignup ? 'tab-active' : ''}
+          onClick={() => {
             setIsSellerSignup(true);
             setIsManagerSignup(false);
 
@@ -87,9 +70,13 @@ function Signup(){
             setSaveID("");
             setSavePW("");
             setConfirmPW("");
-          }}>판매자</button>
-        <button className={`tablinks ${isManagerSignup ? 'tab-active':''}`}
-          onClick={()=>{
+          }}
+        >
+          판매자
+        </TabLink>
+        <TabLink
+          className={isManagerSignup ? 'tab-active' : ''}
+          onClick={() => {
             setIsManagerSignup(true);
             setIsSellerSignup(false);
 
@@ -98,14 +85,16 @@ function Signup(){
             setSaveID("");
             setSavePW("");
             setConfirmPW("");
-          }}>관리자</button>
-      </div>
-      <form className="form">
+          }}
+        >
+          관리자
+        </TabLink>
+      </TabContainer>
+      <FormContainer>
         {/* 이름 */}
-        <div className="login-label">이름</div>
-        <input
-          className="login-text"
-          style={{width:"240px"}}
+        <LoginLabel>이름</LoginLabel>
+        <LoginInput
+          style={{ width: "240px" }}
           type="text"
           placeholder="이름(실명)을 입력해주세요."
           value={name}
@@ -113,66 +102,62 @@ function Signup(){
         />
 
         {/* 이메일 */}
-        <div className="login-label">이메일</div>
-        <div style={{display:"flex"}}>
-          <input
-            className="login-text"
-            style={{width:"320px"}}
+        <LoginLabel>이메일</LoginLabel>
+        <div style={{ display: "flex" }}>
+          <LoginInput
+            style={{ width: "320px" }}
             type="email"
             placeholder="이메일을 입력해주세요."
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <button type="button" className="signup-check" onClick={handleEmailVerification}>인증하기</button>
+          <SignupCheckButton type="button" onClick={handleEmailVerification}>인증하기</SignupCheckButton>
         </div>
         { // 이메일 인증 완료 시 출력
           isEmailCheck ? 
-          <div className="check">
-            <img src={check} alt="체크 출력 실패" style={{marginRight:"5px"}}/>
+          <CheckContainer>
+            <img src={check} alt="체크 출력 실패" />
             <div>인증이 완료되었습니다.</div>
-          </div> : <div/>
+          </CheckContainer> : <div />
         }
 
         {/* 아이디 */}
-        <div className="login-label">아이디</div>
-        <div style={{display:"flex"}}>
-          <input
-            className="login-text"
-            style={{width:"240px"}}
+        <LoginLabel>아이디</LoginLabel>
+        <div style={{ display: "flex" }}>
+          <LoginInput
+            style={{ width: "240px" }}
             type="text"
             placeholder="사용할 아이디를 입력해주세요."
             value={saveID}
             onChange={(e) => setSaveID(e.target.value)}
           />
-          <button type="button" className="signup-check" onClick={handleIDCheck}>중복확인</button>
+          <SignupCheckButton type="button" onClick={handleIDCheck}>중복확인</SignupCheckButton>
         </div>
         { // 아이디 체크 완료 상태 출력
           isIDCheck === true ? 
-          <div className="check">
-            <img src={check} alt="체크 출력 실패" style={{marginRight:"5px"}}/>
+          <CheckContainer>
+            <img src={check} alt="체크 출력 실패" />
             <div>사용 가능한 아이디입니다.</div>
-          </div> : 
+          </CheckContainer> : 
           isIDCheck === false ? (
-            <div className="error">
-              <img src={error} alt="체크 출력 실패" style={{marginRight:"5px"}}/>
+            <ErrorContainer>
+              <img src={error} alt="체크 출력 실패" />
               <div>이미 사용 중인 아이디입니다.</div>
-            </div>
-          ) : <div/>
+            </ErrorContainer>
+          ) : <div />
         }
 
         {/* 비밀번호 */}
-        <div className="login-label">비밀번호</div>
-        <input
-          className="login-text"
-          style={{width:"320px", marginBottom:"10px"}}
+        <LoginLabel>비밀번호</LoginLabel>
+        <LoginInput
+          style={{ width: "320px", marginBottom: "10px" }}
           type="password"
           placeholder="영문+숫자 조합 8자리 이상 입력해주세요."
           value={savePW}
           onChange={(e) => setSavePW(e.target.value)}
         />
-        <input
-          className="login-text"
-          style={{width:"320px"}}
+        <LoginInput
+          style={{ width: "320px" }}
           type="password"
           placeholder="비밀번호 확인"
           value={confirmPW}
@@ -185,19 +170,19 @@ function Signup(){
         />
         {
           (savePW !== confirmPW) && isPWCheck !== null ?
-          <div className="error">
-            <img src={error} alt="체크 출력 실패" style={{marginRight:"5px"}}/>
+          <ErrorContainer>
+            <img src={error} alt="체크 출력 실패" />
             <div>비밀번호를 다시 입력해주세요.</div>
-          </div> : 
+          </ErrorContainer> : 
           (savePW === confirmPW) && isPWCheck !== null ?
-          <div className="check">
-            <img src={check} alt="체크 출력 실패" style={{marginRight:"5px"}}/>
+          <CheckContainer>
+            <img src={check} alt="체크 출력 실패" />
             <div>비밀번호가 일치합니다.</div>
-          </div> : <div/>
+          </CheckContainer> : <div />
         }
-      </form>
-      <button type="button" className="signup-end" onClick={handleSubmit} disabled={!isEmailCheck || !isIDCheck || savePW !== confirmPW}>시작하기</button>
-    </div>
+      </FormContainer>
+      <SignupEndButton type="button" onClick={handleSubmit} disabled={!isEmailCheck || !isIDCheck || savePW !== confirmPW}>시작하기</SignupEndButton>
+    </SignupContainer>
   );
 }
 
