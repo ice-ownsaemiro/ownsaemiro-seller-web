@@ -15,12 +15,12 @@ export const Title = styled.div`
 `;
 
 export const Image = styled.img`
-  width: 35vw;
-  height: 35vh;
-  position: absolute;
-  top: 200px;
-  right: 10%;
-  z-index: 10;
+    width: 35vw;
+    height: 35vh;
+    position: absolute;
+    top: 200px;
+    right: 10%;
+    z-index: 10;
 `;
 
 export const Button = styled.button`

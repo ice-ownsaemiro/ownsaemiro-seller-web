@@ -1,7 +1,7 @@
 // src/components/seller/SelledHistory.tsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import search_logo from "../../assets/logo_search.svg";
-import { SellingData } from "./Data/SellingData";
+import { SellingData } from "../Seller/Data/SellingData";
 import {
   MainContent,
   FilterTableHeader,
@@ -113,10 +113,7 @@ function SelledHistory() {
             </div>
             <SearchBar>
               <SearchIcon className="fa-search" src={search_logo}></SearchIcon>
-              <SearchBarInput
-                type="search"
-                placeholder="검색"
-              />
+              <SearchBarInput type="search" placeholder="검색" />
             </SearchBar>
           </FilterItem>
           <FilterItem>
@@ -127,7 +124,11 @@ function SelledHistory() {
             </div>
             <select
               value={selectedStatus}
-              style={{ border: "2px solid #E5E5E5", borderRadius: "5px", height:"31px" }}
+              style={{
+                border: "2px solid #E5E5E5",
+                borderRadius: "5px",
+                height: "31px",
+              }}
               onChange={(e) => setSelectedStatus(e.target.value)}
             >
               <option value="전체">전체</option>
@@ -185,12 +186,12 @@ function SelledHistory() {
                   item.status === "판매 완료"
                     ? "selled"
                     : item.status === "판매 중"
-                    ? "selling"
-                    : item.status === "판매 전"
-                    ? "beforesell"
-                    : item.status === "판매 중지"
-                    ? "selldeny"
-                    : ""
+                      ? "selling"
+                      : item.status === "판매 전"
+                        ? "beforesell"
+                        : item.status === "판매 중지"
+                          ? "selldeny"
+                          : ""
                 }
               >
                 {item.status}

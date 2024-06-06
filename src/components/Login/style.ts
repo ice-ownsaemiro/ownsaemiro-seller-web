@@ -31,7 +31,9 @@ export const LogoContainer = styled.div`
     background-color: #f0f0f0;
     color: #576fd7;
     font-weight: bold;
-    transition: background-color 0.5s, color 0.5s;
+    transition:
+      background-color 0.5s,
+      color 0.5s;
   }
 `;
 
@@ -87,7 +89,9 @@ export const ButtonContainer = styled.div`
 
     &:hover {
       color: #576fd7;
-      transition: background-color 0.3s, color 0.3s;
+      transition:
+        background-color 0.3s,
+        color 0.3s;
     }
   }
 

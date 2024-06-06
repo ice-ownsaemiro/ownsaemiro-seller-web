@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "../assets/logo_main.svg";
-import sellhis from "../assets/logo_sellhis.svg";
-import sellreq from "../assets/logo_sellreq.svg";
-import logout from "../assets/logo_logout.svg";
-import SelledHistory from "./seller/SelledHistory";
-import SellRequest from "./seller/SellRequest";
+import logo from "../../assets/logo_main.svg";
+import sellhis from "../../assets/logo_sellhis.svg";
+import sellreq from "../../assets/logo_sellreq.svg";
+import logout from "../../assets/logo_logout.svg";
+import SelledHistory from "../Seller/SelledHistory";
+import SellRequest from "../Seller/SellRequest";
 import Cookies from "js-cookie";
 import axios from "axios";
 import {
@@ -20,7 +20,7 @@ import {
   LogoutButton,
 } from "./MainPageStyle";
 
-function MainPage() {
+function Main() {
   const [activeMenu, setActiveMenu] = useState("History");
   const navigate = useNavigate();
   const serverUrl = import.meta.env.VITE_APP_SERVER_URL;
@@ -65,7 +65,7 @@ function MainPage() {
   );
 }
 
-export default MainPage;
+export default Main;
 
 interface ActiveMenuProps {
   activeMenu: any;
@@ -120,7 +120,11 @@ function Seller({ activeMenu, setActiveMenu }: ActiveMenuProps) {
       </div>
       <UserSection>
         <Username>{username} 님</Username>
-        <LogoutButton src={logout} alt="로그아웃 사진 실패" onClick={handleLogout} />
+        <LogoutButton
+          src={logout}
+          alt="로그아웃 사진 실패"
+          onClick={handleLogout}
+        />
       </UserSection>
     </Sidebar>
   );

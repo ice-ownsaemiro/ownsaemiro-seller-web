@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import plus from "../../assets/logo_plus.svg";
 import search_logo from "../../assets/logo_search.svg";
-import { SellHistoryData } from "./Data/SellHistoryData";
-import SellRequestWrite from "./Modal/SellRequestWrite";
+import { SellHistoryData } from "../Seller/Data/SellHistoryData";
+import SellRequestWrite from "../Seller/Modal/SellRequestWrite";
 import {
   MainContent,
   FilterTableHeader,
@@ -118,10 +118,7 @@ function SellRequest() {
             </div>
             <SearchBar>
               <SearchIcon src={search_logo}></SearchIcon>
-              <SearchBarInput
-                type="search"
-                placeholder="검색"
-              />
+              <SearchBarInput type="search" placeholder="검색" />
             </SearchBar>
           </FilterItem>
           <FilterItem>
@@ -132,7 +129,11 @@ function SellRequest() {
             </div>
             <select
               value={selectedStatus}
-              style={{ border: "2px solid #E5E5E5", borderRadius: "5px", height:"31px"  }}
+              style={{
+                border: "2px solid #E5E5E5",
+                borderRadius: "5px",
+                height: "31px",
+              }}
               onChange={(e) => setSelectedStatus(e.target.value)}
             >
               <option value="전체">전체</option>
@@ -194,10 +195,10 @@ function SellRequest() {
                   item.status === "승인 대기"
                     ? "stanby"
                     : item.status === "승인 완료"
-                    ? "approved"
-                    : item.status === "승인 거절"
-                    ? "rejected"
-                    : ""
+                      ? "approved"
+                      : item.status === "승인 거절"
+                        ? "rejected"
+                        : ""
                 }
               >
                 {item.status}
