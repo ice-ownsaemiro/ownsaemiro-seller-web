@@ -38,9 +38,9 @@ export const FormContainer = styled.div`
   gap: 15px;
 `;
 
-export const DateTimeContainer = styled.div`
+export const DateRangeContainer = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   gap: 10px;
 `;
 
@@ -61,13 +61,27 @@ export const ButtonContainer = styled.div`
   margin-top: 20px;
 `;
 
-export const Button = styled.button`
+export const SaveButton = styled.button`
   padding: 10px 20px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  background-color: '#4CAF50'
+  background-color: #576fd7;
   color: white;
+
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
+export const ClosedButton = styled.button`
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #ffffff;
+  border: 1px solid #576fd7;
+  color: black;
 
   &:hover {
     opacity: 0.8;
@@ -93,4 +107,18 @@ export const Textarea = styled.textarea`
 export const Label = styled.label`
   font-weight: bold;
   margin-bottom: 5px;
+`;
+
+export const Select = styled.select`
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+`;
+
+export const TimeContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
 `;

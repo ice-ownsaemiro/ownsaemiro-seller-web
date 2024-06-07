@@ -1,8 +1,8 @@
 import * as Styled from "./style";
-import logo from "../../assets/logo_login.svg";
+import logo from "@/assets/logo_login.svg";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { instance } from "../../apis/axios";
+import { instance } from "@/apis/axios";
 
 interface LoginFormProps {
   serial_id: string;

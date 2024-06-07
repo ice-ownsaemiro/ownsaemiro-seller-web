@@ -1,9 +1,8 @@
 export default interface SalesHistoryState {
-  eventId: number;
-  eventName: String;
-  hostName: String;
-  applyDate: String;
+  event_id: number;
+  event_name: String;
+  host_name: String;
+  apply_date: String;
   duration: String;
-  seat: String;
   status: String;
 }

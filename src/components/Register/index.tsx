@@ -1,11 +1,11 @@
 // src/components/Signup/Signup.tsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "../../assets/logo_login.svg";
-import check from "../../assets/logo_check.svg";
-import error from "../../assets/logo_error.svg";
+import logo from "@/assets/logo_login.svg";
+import check from "@/assets/logo_check.svg";
+import error from "@/assets/logo_error.svg";
 import * as Styled from "./style";
-import { instance } from "../../apis/axios";
+import { instance } from "@/apis/axios";
 
 export default function Signup() {
   const [name, setName] = useState("");

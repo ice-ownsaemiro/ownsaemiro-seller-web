@@ -1,6 +1,9 @@
 import React, { useState } from "react";
-import back_logo from "../../../assets/logo_back.svg";
+import back_logo from "@/assets/logo_back.svg";
 import * as Styled from "./style";
+import { instance } from "@/apis/axios";
+import { useRecoilValue } from "recoil";
+import { userNicknameState } from "@/atoms/atoms";
 
 interface SellRequestWriteProps {
   open: boolean;
@@ -13,36 +16,73 @@ export const SellRequestWrite: React.FC<SellRequestWriteProps> = ({
   handleClose,
   handleSave,
 }) => {
-  const [eventName, setEventName] = useState("");
-  const [eventStartDate, setEventStartDate] = useState("");
-  const [eventEndDate, setEventEndDate] = useState("");
-  const [eventTime, setEventTime] = useState("");
-  const [eventPlace, setEventPlace] = useState("");
-  const [eventPlanner, setEventPlanner] = useState("");
-  const [eventNumber, setEventNumber] = useState("");
-  const [eventAge, setEventAge] = useState("");
-  const [eventExplain, setEventExplain] = useState("");
+  const [name, setName] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [price, setPrice] = useState("");
+  const [seat, setSeat] = useState("");
+  const [runningTime, setRunningTime] = useState("");
+  const [address, setAddress] = useState("");
+  const [category, setCategory] = useState("MUSICAL");
+  const [rating, setRating] = useState("");
+  const [description, setDescription] = useState("");
+  const [eventImage, setEventImage] = useState<File | null>(null);
+  const username = useRecoilValue(userNicknameState);
 
-  const handleSubmit = () => {
-    const newItem = {
-      id: Math.random(), // You might want to replace this with a proper ID generation method
-      applicant: "",
-      username: "",
-      eventName,
-      requestDate: new Date().toISOString().split("T")[0],
-      eventDate: `${eventStartDate} ~ ${eventEndDate}`,
-      status: "승인 대기",
-      eventStartDate,
-      eventEndDate,
-      eventTime,
-      eventPlace,
-      eventPlanner,
-      eventNumber,
-      eventAge,
-      eventExplain,
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setEventImage(e.target.files[0]);
+    }
+  };
+
+  const handleSubmit = async () => {
+    const formData = new FormData();
+
+    const requestJson = {
+      event_name: name,
+      start_date: startDate,
+      end_date: endDate,
+      seat_cnt: seat,
+      price: price,
+      running_time: runningTime,
+      address: address,
+      category: category,
+      description: description,
+      host_name: username.nickname,
+      rating: rating,
     };
-    handleSave(newItem);
-    handleClose();
+
+    console.log(requestJson);
+
+    if (eventImage) {
+      formData.append("image", eventImage as Blob);
+    }
+    formData.append(
+      "data",
+      new Blob([JSON.stringify(requestJson)], { type: "application/json" })
+    );
+
+    try {
+      const response = await instance.post("/api/seller/apply", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.status === 200) {
+        alert("신청이 완료되었습니다.");
+
+        const newItem = response.data.data;
+
+        handleSave(newItem);
+        handleClose();
+      } else {
+        alert("신청에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("신청 요청 실패", error);
+      alert("신청 요청 중 오류가 발생했습니다.");
+    }
   };
 
   if (!open) return null;
@@ -57,71 +97,106 @@ export const SellRequestWrite: React.FC<SellRequestWriteProps> = ({
           <Styled.Label htmlFor="eventName">공연명</Styled.Label>
           <Styled.Input
             type="text"
-            value={eventName}
-            onChange={(e) => setEventName(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
 
-          <Styled.DateTimeContainer>
-            <Styled.Label htmlFor="eventDate">공연 날짜</Styled.Label>
+          <Styled.Label htmlFor="eventDate">공연 날짜</Styled.Label>
+          <Styled.DateRangeContainer>
             <Styled.Input
               type="date"
-              value={eventStartDate}
-              onChange={(e) => setEventStartDate(e.target.value)}
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
             />
             <span> ~ </span>
             <Styled.Input
               type="date"
-              value={eventEndDate}
-              onChange={(e) => setEventEndDate(e.target.value)}
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
             />
-            <Styled.Label htmlFor="eventTime">공연 시간</Styled.Label>
+          </Styled.DateRangeContainer>
+
+          <Styled.Label htmlFor="eventTime">공연 시간</Styled.Label>
+          <Styled.TimeContainer>
             <Styled.Input
               type="text"
-              value={eventTime}
-              onChange={(e) => setEventTime(e.target.value)}
+              value={runningTime}
+              onChange={(e) => setRunningTime(e.target.value)}
             />
             <span>분</span>
-            <Styled.Label htmlFor="eventPlace">공연 장소</Styled.Label>
-            <Styled.Input
-              type="text"
-              value={eventPlace}
-              onChange={(e) => setEventPlace(e.target.value)}
-            />
-          </Styled.DateTimeContainer>
+          </Styled.TimeContainer>
+
+          <Styled.Label htmlFor="eventPlace">공연 장소</Styled.Label>
+          <Styled.Input
+            type="text"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
 
           <Styled.AdditionalInfoContainer>
-            <Styled.Label htmlFor="eventPlanner">주최/기획</Styled.Label>
-            <Styled.Input
-              type="text"
-              value={eventPlanner}
-              onChange={(e) => setEventPlanner(e.target.value)}
-            />
-            <Styled.Label htmlFor="eventNumber">대표자 전화번호</Styled.Label>
-            <Styled.Input
-              type="text"
-              value={eventNumber}
-              onChange={(e) => setEventNumber(e.target.value)}
-            />
             <Styled.Label htmlFor="eventAge">관람등급</Styled.Label>
             <Styled.Input
               type="text"
-              value={eventAge}
-              onChange={(e) => setEventAge(e.target.value)}
+              value={rating}
+              onChange={(e) => setRating(e.target.value)}
             />
+          </Styled.AdditionalInfoContainer>
+
+          <Styled.AdditionalInfoContainer>
+            <Styled.Label>가격</Styled.Label>
+            <Styled.Input
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+            />
+          </Styled.AdditionalInfoContainer>
+
+          <Styled.AdditionalInfoContainer>
+            <Styled.Label>좌석 수</Styled.Label>
+            <Styled.Input
+              type="number"
+              value={seat}
+              onChange={(e) => setSeat(e.target.value)}
+            />
+          </Styled.AdditionalInfoContainer>
+
+          <Styled.AdditionalInfoContainer>
+            <Styled.Label>종류</Styled.Label>
+            <Styled.Select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              <option value="MUSICAL">뮤지컬</option>
+              <option value="EXHIBITION">전시</option>
+              <option value="THEATER">연극</option>
+              <option value="CONCERT">콘서트</option>
+              <option value="SPORT">스포츠</option>
+            </Styled.Select>
           </Styled.AdditionalInfoContainer>
 
           <Styled.ExplainContainer>
             <Styled.Label htmlFor="eventExplain">공연내용 요약</Styled.Label>
             <Styled.Textarea
-              value={eventExplain}
-              onChange={(e) => setEventExplain(e.target.value)}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               maxLength={500}
             />
           </Styled.ExplainContainer>
 
+          <Styled.AdditionalInfoContainer>
+            <Styled.Label htmlFor="eventImage">공연 이미지</Styled.Label>
+            <Styled.Input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+          </Styled.AdditionalInfoContainer>
+
           <Styled.ButtonContainer>
-            <Styled.Button onClick={handleSubmit}>저장</Styled.Button>
-            <Styled.Button onClick={handleClose}>취소</Styled.Button>
+            <Styled.SaveButton onClick={handleSubmit}>저장</Styled.SaveButton>
+            <Styled.ClosedButton onClick={handleClose}>
+              취소
+            </Styled.ClosedButton>
           </Styled.ButtonContainer>
         </Styled.FormContainer>
       </Styled.ModalContent>

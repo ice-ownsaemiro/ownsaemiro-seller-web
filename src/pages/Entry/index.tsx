@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import * as Styled from "./style";
-import logo from "../../assets/logo_main.svg";
-import MiddleRectangle from "../../components/Common/Rectangle/Middle";
-import LargeRectangle from "../../components/Common/Rectangle/Large";
+import logo from "@/assets/logo_main.svg";
+import MiddleRectangle from "@/components/Common/Rectangle/Middle";
+import LargeRectangle from "@/components/Common/Rectangle/Large";
 
 export default function EntryPage() {
   const navigate = useNavigate();

@@ -1,74 +1,24 @@
-import { useState, useEffect } from "react";
+import { instance } from "@/apis/axios";
+import { userNicknameState } from "@/atoms/atoms";
+import { useFetchSellerNickname } from "@/hooks/useFetchSellerNickname";
 import { useNavigate } from "react-router-dom";
-import logo from "../../assets/logo_main.svg";
-import sellhis from "../../assets/logo_sellhis.svg";
-import sellreq from "../../assets/logo_sellreq.svg";
-import logout from "../../assets/logo_logout.svg";
-import SelledHistory from "../Seller/SalesHistory";
-import SellRequest from "../Seller/SalesRequest";
-import { instance } from "../../apis/axios";
-
+import { useRecoilState } from "recoil";
 import * as Styled from "./style";
-import Cookies from "js-cookie";
-
-export default function Main() {
-  const [activeMenu, setActiveMenu] = useState("History");
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const accessToken = Cookies.get("access_token");
-
-    if (!accessToken) {
-      navigate("/");
-    }
-  });
-
-  const renderContent = () => {
-    switch (activeMenu) {
-      case "History":
-        return <SelledHistory />;
-      case "Request":
-        return <SellRequest />;
-      default:
-        return null;
-    }
-  };
-
-  return (
-    <Styled.Container>
-      <Seller activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
-      <Styled.MainContent>{renderContent()}</Styled.MainContent>
-    </Styled.Container>
-  );
-}
+import logo from "@/assets/logo_main.svg";
+import sellreq from "@/assets/logo_sellreq.svg";
+import sellhis from "@/assets/logo_sellhis.svg";
+import logout from "@/assets/logo_logout.svg";
 
 interface ActiveMenuProps {
   activeMenu: any;
   setActiveMenu: any;
 }
 
-function Seller({ activeMenu, setActiveMenu }: ActiveMenuProps) {
+export default function Seller({ activeMenu, setActiveMenu }: ActiveMenuProps) {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("판매자");
+  const [username, setUsername] = useRecoilState(userNicknameState);
 
-  useEffect(() => {
-    const fetchUsername = async () => {
-      try {
-        const response = await instance.get("/api/seller/nickname");
-
-        if (response.status === 200) {
-          setUsername(response.data.data.nickname);
-        } else {
-          alert("사용자 정보를 불러오는데 실패했습니다.");
-        }
-      } catch (error) {
-        console.error("사용자 정보 요청 실패", error);
-        alert("사용자 정보 요청 중 오류가 발생했습니다.");
-      }
-    };
-
-    fetchUsername();
-  }, []);
+  useFetchSellerNickname();
 
   const handleLogout = async () => {
     if (window.confirm("로그아웃 하시겠습니까?")) {
@@ -116,7 +66,7 @@ function Seller({ activeMenu, setActiveMenu }: ActiveMenuProps) {
         </Styled.MenuSelect>
       </div>
       <Styled.UserSection>
-        <Styled.Username>{username} 님</Styled.Username>
+        <Styled.Username>{username.nickname} 님</Styled.Username>
         <Styled.LogoutButton
           src={logout}
           alt="로그아웃 사진 실패"

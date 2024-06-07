@@ -1,6 +1,6 @@
-import LargeRectangle from "../../components/Common/Rectangle/Large";
-import MiddleRectangle from "../../components/Common/Rectangle/Middle";
-import LoginContainer from "../../components/Login";
+import LargeRectangle from "@/components/Common/Rectangle/Large";
+import MiddleRectangle from "@/components/Common/Rectangle/Middle";
+import LoginContainer from "@/components/Login";
 import * as Styled from "./style";
 
 export default function LoginPage() {

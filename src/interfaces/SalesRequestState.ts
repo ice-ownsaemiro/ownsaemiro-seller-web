@@ -1,8 +1,8 @@
 export default interface SalesHistoryState {
   id: number;
   name: String;
-  hostName: String;
-  applyDate: String;
+  host_name: String;
+  apply_date: String;
   duration: String;
   state: String;
 }

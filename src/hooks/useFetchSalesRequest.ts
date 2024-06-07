@@ -1,15 +1,17 @@
 import { useEffect } from "react";
-import { salesRequestState } from "../atoms/atoms";
+import { salesRequestState, totalPageState } from "@/atoms/atoms";
 import { useSetRecoilState } from "recoil";
-import { fetchSalesRequest } from "../apis/seller";
+import { fetchSalesRequest } from "@/apis/seller";
 
-export const useFetchSalesHistories = (page: number, size: number) => {
+export const useFetchSalesRequest = (page: number, size: number) => {
   const setSalesRequest = useSetRecoilState(salesRequestState);
+  const setTotalPages = useSetRecoilState(totalPageState);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchSalesRequest(page, size);
-      setSalesRequest(data.event_applies);
+      const result = await fetchSalesRequest(page, size);
+      setSalesRequest(result.data.data.event_applies);
+      setTotalPages(result.data.data.page_info.total_page);
     };
 
     fetchData();
