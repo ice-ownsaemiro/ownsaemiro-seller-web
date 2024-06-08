@@ -237,7 +237,7 @@ export const Td = styled.td<{ status?: string }>`
   ${({ status }) =>
     status === "BEFORE" &&
     css`
-      color: #eb5a5a;
+      color: #67a238;
     `}
 
   ${({ status }) =>
@@ -249,19 +249,19 @@ export const Td = styled.td<{ status?: string }>`
   ${({ status }) =>
     status === "SOLDOUT" &&
     css`
-      color: #67a238;
+      color: #000000;
     `}
     
   ${({ status }) =>
     status === "COMPLETE" &&
     css`
-      color: #67a238;
+      color: #999999;
     `}
 
   ${({ status }) =>
     status === "PAUSE" &&
     css`
-      color: #67a238;
+      color: #eb5a5a;
     `}
 `;
 
