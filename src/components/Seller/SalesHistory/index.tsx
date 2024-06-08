@@ -2,13 +2,15 @@ import { useState, useEffect } from "react";
 import search_logo from "@/assets/logo_search.svg";
 import * as Styled from "./style";
 import { useFetchSalesHistories } from "@/hooks/useFetchSalesHistories";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { salesHistoryState, totalPageState } from "@/atoms/atoms";
 import { updateSellerEventStatus } from "@/apis/seller";
+import { instance } from "@/apis/axios";
+import { c } from "vite/dist/node/types.d-aGj9QkWt";
 
 export default function SelledHistory() {
-  const data = useRecoilValue(salesHistoryState);
-  const totalPage = useRecoilValue(totalPageState);
+  const [data, setData] = useRecoilState(salesHistoryState);
+  const [totalPage, setTotalPage] = useRecoilState(totalPageState);
   const [selectedStatus, setSelectedStatus] = useState("전체");
   const [searchKeyword, setSearchKeyword] = useState("");
 
@@ -98,9 +100,26 @@ export default function SelledHistory() {
     setSelectAll(false);
   };
 
-  const handleSearch = () => {
-    setCurrentPage(1);
+  const fetchData = async () => {
+    let url = `/api/seller/histories?page=${currentPage}&size=${itemsPerPage}`;
+
+    if (selectedStatus !== "전체") {
+      url += `&status=${selectedStatus}`;
+    }
+
+    if (searchKeyword !== "") {
+      url += `&name=${searchKeyword}`;
+    }
+
+    const result = await instance.get(url);
+
+    setData(result.data.data.my_event_histories);
+    setTotalPage(result.data.data.page_info.total_page);
   };
+
+  useEffect(() => {
+    fetchData();
+  }, [currentPage, selectedStatus, searchKeyword]);
 
   return (
     <Styled.Content>
@@ -150,7 +169,6 @@ export default function SelledHistory() {
                 />
               </Styled.SearchBar>
             </Styled.FilterItem>
-            <Styled.Button onClick={handleSearch}>검색</Styled.Button>
           </Styled.Filter>
           <Styled.TableHeader>
             <Styled.ApprovedBtn onClick={handleComplete}>
@@ -177,22 +195,40 @@ export default function SelledHistory() {
             </tr>
           </thead>
           <tbody>
-            {data.map((item) => (
-              <Styled.Tr>
-                <Styled.Td onClick={(e) => e.stopPropagation()}>
-                  <input
-                    type="checkbox"
-                    checked={selectedItems.includes(item.event_id)}
-                    onChange={() => handleSelectItem(item.event_id)}
-                  />
+            {data.length === 0 ? (
+              <tr>
+                <Styled.Td colSpan={7} style={{ textAlign: "center" }}>
+                  등록된 판매 이력이 없습니다.
                 </Styled.Td>
-                <Styled.Td>{item.event_name}</Styled.Td>
-                <Styled.Td>{item.host_name}</Styled.Td>
-                <Styled.Td>{item.apply_date}</Styled.Td>
-                <Styled.Td>{item.duration}</Styled.Td>
-                <Styled.Td>{item.status}</Styled.Td>
-              </Styled.Tr>
-            ))}
+              </tr>
+            ) : (
+              data.map((item) => (
+                <Styled.Tr>
+                  <Styled.Td onClick={(e) => e.stopPropagation()}>
+                    <input
+                      type="checkbox"
+                      checked={selectedItems.includes(item.event_id)}
+                      onChange={() => handleSelectItem(item.event_id)}
+                    />
+                  </Styled.Td>
+                  <Styled.Td>{item.event_name}</Styled.Td>
+                  <Styled.Td>{item.host_name}</Styled.Td>
+                  <Styled.Td>{item.apply_date}</Styled.Td>
+                  <Styled.Td>{item.duration}</Styled.Td>
+                  <Styled.Td status={item.status}>
+                    {item.status === "BEFORE"
+                      ? "판매 전"
+                      : item.status === "SELLING"
+                        ? "판매 중"
+                        : item.status === "SOLDOUT"
+                          ? "매진"
+                          : item.status === "COMPLETE"
+                            ? "판매 완료"
+                            : "판매 중지"}
+                  </Styled.Td>
+                </Styled.Tr>
+              ))
+            )}
           </tbody>
         </Styled.Table>
         <Styled.Pagination>

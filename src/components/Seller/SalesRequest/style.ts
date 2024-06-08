@@ -217,6 +217,7 @@ export const Table = styled.table`
   border: 2px solid #e5e5e5;
   border-radius: 5px;
   text-align: center;
+  table-layout: fixed;
 `;
 
 export const Th = styled.th`
@@ -224,12 +225,14 @@ export const Th = styled.th`
   padding: 15px;
   border-bottom: 2px solid #e5e5e5;
   background-color: #f8fcff;
+  width: 20%;
 `;
 
 export const Td = styled.td<{ state?: string }>`
   color: #555;
   padding: 15px;
   border-bottom: 2px solid #e5e5e5;
+  width: 20%;
 
   ${({ state }) =>
     state === "REJECT" &&

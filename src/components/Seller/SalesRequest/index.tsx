@@ -6,6 +6,7 @@ import search_logo from "@/assets/logo_search.svg";
 import { useFetchSalesRequest } from "@/hooks/useFetchSalesRequest";
 import { SellRequestWrite } from "@/components/Common/Modal";
 import { deleteSellerEvent } from "@/apis/seller";
+import { instance } from "@/apis/axios";
 
 export default function SellRequest() {
   const [data, setData] = useRecoilState(salesRequestState);
@@ -33,6 +34,7 @@ export default function SellRequest() {
 
   const handleClose = () => {
     setOpen(false);
+    window.location.reload();
   };
 
   const handlePageChange = (pageNumber: number) => {
@@ -91,9 +93,26 @@ export default function SellRequest() {
     setSelectAll(false);
   };
 
-  const handleSearch = () => {
-    setCurrentPage(1);
+  const fetchData = async () => {
+    let url = `/api/seller/apply?page=${currentPage}&size=${itemsPerPage}`;
+
+    if (selectedStatus !== "전체") {
+      url += `&status=${selectedStatus}`;
+    }
+
+    if (searchKeyword) {
+      url += `&name=${searchKeyword}`;
+    }
+
+    const response = await instance.get(url);
+
+    setData(response.data.data.event_applies);
+    setTotalPage(response.data.data.page_info.total_page);
   };
+
+  useEffect(() => {
+    fetchData();
+  }, [currentPage, selectedStatus, searchKeyword]);
 
   return (
     <Styled.Content>
@@ -141,7 +160,6 @@ export default function SellRequest() {
                 />
               </Styled.SearchBar>
             </Styled.FilterItem>
-            <Styled.Button onClick={handleSearch}>검색</Styled.Button>
           </Styled.Filter>
           <Styled.TableHeader>
             <Styled.ApprovedBtn onClick={handleOpen}>
@@ -168,22 +186,36 @@ export default function SellRequest() {
             </tr>
           </thead>
           <tbody>
-            {data.map((item) => (
-              <Styled.Tr>
-                <Styled.Td onClick={(e) => e.stopPropagation()}>
-                  <input
-                    type="checkbox"
-                    checked={selectedItems.includes(item.id)}
-                    onChange={() => handleSelectItem(item.id)}
-                  />
+            {data.length === 0 ? (
+              <tr>
+                <Styled.Td colSpan={7} style={{ textAlign: "center" }}>
+                  등록된 판매 요청이 없습니다.
                 </Styled.Td>
-                <Styled.Td>{item.name}</Styled.Td>
-                <Styled.Td>{item.host_name}</Styled.Td>
-                <Styled.Td>{item.apply_date}</Styled.Td>
-                <Styled.Td>{item.duration}</Styled.Td>
-                <Styled.Td>{item.state}</Styled.Td>
-              </Styled.Tr>
-            ))}
+              </tr>
+            ) : (
+              data.map((item) => (
+                <Styled.Tr>
+                  <Styled.Td onClick={(e) => e.stopPropagation()}>
+                    <input
+                      type="checkbox"
+                      checked={selectedItems.includes(item.id)}
+                      onChange={() => handleSelectItem(item.id)}
+                    />
+                  </Styled.Td>
+                  <Styled.Td>{item.name}</Styled.Td>
+                  <Styled.Td>{item.host_name}</Styled.Td>
+                  <Styled.Td>{item.apply_date}</Styled.Td>
+                  <Styled.Td>{item.duration}</Styled.Td>
+                  <Styled.Td state={item.state}>
+                    {item.state === "WAITING"
+                      ? "승인 대기"
+                      : item.state === "COMPLETE"
+                        ? "승인 허가"
+                        : "승인 거절"}
+                  </Styled.Td>
+                </Styled.Tr>
+              ))
+            )}
           </tbody>
         </Styled.Table>
         <Styled.Pagination>

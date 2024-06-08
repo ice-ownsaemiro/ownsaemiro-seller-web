@@ -217,34 +217,49 @@ export const Table = styled.table`
   border: 2px solid #e5e5e5;
   border-radius: 5px;
   text-align: center;
+  table-layout: fixed;
 `;
 
 export const Th = styled.th`
   color: #999;
   padding: 15px;
+  width: 20%;
   border-bottom: 2px solid #e5e5e5;
   background-color: #f8fcff;
 `;
 
-export const Td = styled.td<{ state?: string }>`
+export const Td = styled.td<{ status?: string }>`
   color: #555;
   padding: 15px;
+  width: 20%;
   border-bottom: 2px solid #e5e5e5;
 
-  ${({ state }) =>
-    state === "REJECT" &&
+  ${({ status }) =>
+    status === "BEFORE" &&
     css`
       color: #eb5a5a;
     `}
 
-  ${({ state }) =>
-    state === "COMPLETE" &&
+  ${({ status }) =>
+    status === "SELLING" &&
     css`
       color: #576fd7;
     `}
 
-  ${({ state }) =>
-    state === "WAITING" &&
+  ${({ status }) =>
+    status === "SOLDOUT" &&
+    css`
+      color: #67a238;
+    `}
+    
+  ${({ status }) =>
+    status === "COMPLETE" &&
+    css`
+      color: #67a238;
+    `}
+
+  ${({ status }) =>
+    status === "PAUSE" &&
     css`
       color: #67a238;
     `}
