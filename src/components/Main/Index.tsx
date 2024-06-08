@@ -4,20 +4,11 @@ import SelledHistory from "../Seller/SalesHistory";
 import SellRequest from "../Seller/SalesRequest";
 
 import * as Styled from "./style";
-import Cookies from "js-cookie";
 import Seller from "../Seller";
 
 export default function Main() {
   const [activeMenu, setActiveMenu] = useState("History");
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const accessToken = Cookies.get("access_token");
-
-    if (!accessToken) {
-      navigate("/");
-    }
-  });
 
   const renderContent = () => {
     switch (activeMenu) {
