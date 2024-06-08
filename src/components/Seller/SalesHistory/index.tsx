@@ -6,7 +6,6 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { salesHistoryState, totalPageState } from "@/atoms/atoms";
 import { updateSellerEventStatus } from "@/apis/seller";
 import { instance } from "@/apis/axios";
-import { c } from "vite/dist/node/types.d-aGj9QkWt";
 
 export default function SelledHistory() {
   const [data, setData] = useRecoilState(salesHistoryState);
