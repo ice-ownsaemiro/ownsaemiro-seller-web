@@ -117,7 +117,7 @@ export default function SellRequest() {
   return (
     <Styled.Content>
       <Styled.MainContent key={`${selectedStatus}-${currentPage}`}>
-        <h1 style={{ color: "#555" }}>판매 이력</h1>
+        <h1 style={{ color: "#555" }}>판매 요청</h1>
         <Styled.FilterTableHeader>
           <Styled.Filter>
             <Styled.FilterItem>
